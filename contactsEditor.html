@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Contact Editor</title>
+    <style>
+        table, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div id='contactsList'>
+        <table id="contacts">
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Phone numbers</th>
+            </tr>
+            <tbody>
+                <tr id="contactRow0">
+                    <td>
+                        <input value="" id="firstName0">
+                        <div><a href='#' onclick="removeContact(0)" id="removeContact">Delete</a></div>
+                    </td>
+                    <td><input value="" id="lastName0"></td>
+                    <td>
+                        <table id="phones0">
+                            <tbody>
+                                <tr id="phoneRow0" name="0">
+                                    <td><input id="type0" onsubmit="return false"></td>
+                                    <td><input id="number0" onsubmit="return false"></td>
+                                    <td><a href='#' onclick="removePhone(0)" id="removePhone">Delete</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a href='#' onclick="addPhone(0)">Add number</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p>
+        <input type="button" id="addBtn" onclick="addContact()" value="Add a contact" onsubmit="return false">
+        <input type="button" id="save" onclick="save()" value="Save to JSON">
+    </p>
+
+    <textarea id="myTextArea" value="lastSavedJSON" rows='5' cols='60' disabled='disabled'> </textarea>
+    <script>
+        var indexC, contacts = document.getElementById("contacts");
+        var indexP, phones = document.getElementById("phones");
+        var maxContactId = 1;
+        var maxPhoneId = 1;
+
+        //=================== FUNCTIONS =============================
+        var contactTemplate = `<tr id="contactRow{maxContactId}"><td>
+                                    <input value="" id="firstName{maxContactId}">
+                                        <div><a href='#' onclick="removeContact({maxContactId})">Delete</a></div>
+                                    </td>
+                                    <td><input value="" id="lastName{maxContactId}"></td>
+                                    <td>
+                                        <table id="phones{maxContactId}">
+                                             <tbody>
+                                             </tbody>
+                                        </table>
+                                        <a href='#' onclick="addPhone({maxContactId})">Add number</a>
+                                    </td>
+                                </tr>`;
+        var addContact = function () {
+            contacts.innerHTML += contactTemplate.replaceAll('{maxContactId}', maxContactId);
+            maxContactId++;
+        }
+
+        var removeContact = function (x) {
+            var element = document.getElementById("contactRow" + x);
+            if (element != undefined)
+                element.remove();
+        }
+
+        var phoneTemplate = `<tr id="phoneRow{maxPhoneId}" name="{maxPhoneId}">
+                                                    <td><input id="type{maxPhoneId}" onsubmit="return false"></td>
+                                                    <td><input id="number{maxPhoneId}" onsubmit="return false"></td>
+                                                    <td><a href='#' onclick="removePhone({maxPhoneId})">Delete</a></td>
+                                                </tr>`;
+        var addPhone = function (x) {
+            /* checks which contact we are on, to know which table of phones we need to edit */
+            var element = document.getElementById("phones" + x);
+            if (element != undefined) {
+
+                element.innerHTML += phoneTemplate.replaceAll('{maxPhoneId}', maxPhoneId);
+                maxPhoneId++;
+            }
+        }
+
+        var removePhone = function (x) {
+            // var i = selected contact
+            // var x = selected phone
+            var element = document.getElementById("phoneRow" + x);
+            if (element != undefined) {
+                element.remove();
+            }
+        }
+        var finalData = [
+            {
+                firstName: "Danny", lastName: "LaRusso", phones: [
+                    { type: "Mobile", number: "(555) 121-2121" },
+                    { type: "Home", number: "(555) 123-4567" }]
+            },
+            {
+                firstName: "Sensei", lastName: "Miyagi", phones: [
+                    { type: "Mobile", number: "(555) 444-2222" },
+                    { type: "Home", number: "(555) 999-1212" }]
+            }
+        ];
+        var save = function () {
+            for (var i = 0; i < maxContactId; i++) {
+                var data = [];
+                var contactRow = document.getElementById("contactRow" + i);
+                if (contactRow != undefined) {
+                    var firstNameO = document.getElementById("firstName" + i).value;
+                    var lastNameO = document.getElementById("lastName" + i).value;
+                   
+                    var phoneTable = document.getElementById("phones" + i);
+                    var fullObject = { firstName: firstNameO, lastName: lastNameO };
+                    if (phoneTable.rows.length > 0) {
+                        var phoneData = [];
+                        //debugger;
+                        for (var j = 0; j < phoneTable.rows.length; j++) {
+                            var name = phoneTable.rows[j].getAttribute("name");
+                            var typeO = document.getElementById("type" + name).value;
+                            var numberO = document.getElementById("number" + name).value;
+                            var phoneObject = { type: typeO, number: numberO };
+                            phoneData.push(phoneObject);                            
+                        }
+                        fullObject.phones = phoneData;
+                    }                  
+                }
+                finalData.push(fullObject);
+            }
+            const dataToString = JSON.stringify(finalData);            
+            document.getElementById("myTextArea").value = dataToString;
+            debugger;
+        }
+    </script>
+</body>
+</html>
