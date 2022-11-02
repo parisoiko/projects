@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>e-Shop | Payment</title>
+    <!--------------------------SCRIPTS--------------------------->
+    <script type='text/javascript' src='https://knockoutjs.com/downloads/knockout-3.5.1.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-validation/2.0.4/knockout.validation.min.js" crossorigin="anonymous"></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.js'></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mystyles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/eshop.html">e-Shop | Back To Shopping</a>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="card m-3">
+            <div class="card-header">
+                <h5 class="modal-title" id="cardModalLabel">Your Cart</h5>
+            </div>
+            <div class="card-body" data-bind="foreach: productsInCart">
+                <div class="row pt-2">
+                    <div class="col-sm-5 mt-2">
+                        <h5 data-bind="text: title"></h5>
+                    </div>
+                    <div class="col-sm-4 mb-sm-0 mb-2" data-bind="visible: inCart()">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-secondary" data-bind="click: removeQuantity">-</button>
+                            <input type="text" id="amount" data-bind="value: quantity" />
+                            <button type="button" class="btn btn-secondary" data-bind="click: addQuantity">+</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mb-sm-0 mb-2">
+                        <button type="button" class="btn btn-secondary" data-bind="text: formatCurrency(totalPrice()), enable: false"></button>
+                    </div>
+                    <div class="col-12 mt-1" data-bind="text: descriptionShort"></div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center pb-4"><h4 data-bind="visible: productsInCart().length == 0">Your Cart Is Empty</h4></div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-12 col-xl-2 col-md-4 col-sm-5 offset-xl-7 offset-md-5 offset-sm-4 offset-0 mb-2">
+                        <button type="button" class="btn btn-secondary d-flex" data-bind="enable: false">Total Cart Price:</button>
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-secondary" data-bind="text: formatCurrency(totalCartPrice()), enable: false"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-3 mb-3 pt-3 pb-3 ">
+        <a href="eshop.html"><button type="button" class="btn btn-secondary mr-2">Back To Shopping</button></a>
+        <button type="button" class="btn btn-primary ml-2" data-bind="visible: productsInCart().length > 0">Go to Payment</button>
+    </div>
+    <footer class="bg-light text-center text-lg-start">
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2020 Copyright:
+            <a class="text-dark" href="https://mdbootstrap.com/">Paris Oikonomou</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <script src="eshopScript.js"></script>
+</body>
+</html>
